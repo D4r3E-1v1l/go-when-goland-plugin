@@ -1,0 +1,13 @@
+# Editor Config
+.gradle/
+.idea/
+*.iml
+
+# Build Dir
+.intellijPlatform/
+build/
+.kotlin/
+
+# OS
+.DS_Store
+

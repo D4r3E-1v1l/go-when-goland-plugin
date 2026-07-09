@@ -1,0 +1,26 @@
+<idea-plugin>
+    <id>org.shiyuliu.go-when-goland-plugin</id>
+
+    <name>Go When</name>
+
+    <vendor url="https://github.com/D4r3E-1v1l">Shiyu Liu</vendor>
+
+    <description><![CDATA[
+        GoLand inspections and quick fixes for go-when.
+    ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>org.jetbrains.plugins.go</depends>
+    <depends>com.intellij.modules.goland</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <localInspection
+                language="go"
+                shortName="GoWhenInspection"
+                displayName="go-when matcher chain must end with a terminal method"
+                groupName="Go When"
+                enabledByDefault="true"
+                level="ERROR"
+                implementationClass="org.shiyuliu.gowhen.inspection.GoWhenChainInspection"/>
+    </extensions>
+</idea-plugin>
