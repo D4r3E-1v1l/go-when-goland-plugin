@@ -1,10 +1,10 @@
 package org.shiyuliu.gowhen.inspection
 
 import com.intellij.codeInspection.ProblemHighlightType
-import org.shiyuliu.gowhen.chain.ChainIssue
-import org.shiyuliu.gowhen.chain.ChainIssueType
-import org.shiyuliu.gowhen.chain.MatcherType
-import org.shiyuliu.gowhen.constant.ScannerConstants
+import org.shiyuliu.gowhen.chain.model.ChainIssue
+import org.shiyuliu.gowhen.chain.model.ChainIssueType
+import org.shiyuliu.gowhen.chain.model.MatcherType
+import org.shiyuliu.gowhen.chain.constants.ScannerConstants
 
 object InspectionInfoFactory {
     fun from(issue: ChainIssue): InspectionInfo {
@@ -74,9 +74,9 @@ object InspectionInfoFactory {
                 highlightType = ProblemHighlightType.GENERIC_ERROR,
             )
 
-            ChainIssueType.MISSING_ENUM_CASE -> InspectionInfo(
-                message = "missing enum case",
-                highlightType = ProblemHighlightType.GENERIC_ERROR,
+            ChainIssueType.MISSING_ENUM_CASES -> InspectionInfo(
+                message = issue.enumMissingCasesMessage(),
+                highlightType = ProblemHighlightType.WARNING,
             )
         }
     }
@@ -159,5 +159,20 @@ object InspectionInfoFactory {
         targetEnd: Int,
     ): Boolean {
         return startOffset >= targetStart && endOffset <= targetEnd
+    }
+
+    private fun ChainIssue.enumMissingCasesMessage(): String {
+        val enumType = details["enumType"]
+        val missingCases = details["missingCases"]
+
+        if (!enumType.isNullOrBlank() && !missingCases.isNullOrBlank()) {
+            return "go-when enum exhaustive check failed for $enumType, missing cases: $missingCases"
+        }
+
+        if (!missingCases.isNullOrBlank()) {
+            return "go-when enum exhaustive check failed, missing cases: $missingCases"
+        }
+
+        return "go-when enum exhaustive check failed: some enum cases are not covered"
     }
 }

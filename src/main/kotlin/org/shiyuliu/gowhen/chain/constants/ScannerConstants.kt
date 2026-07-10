@@ -1,6 +1,6 @@
-package org.shiyuliu.gowhen.constant
+package org.shiyuliu.gowhen.chain.constants
 
-import org.shiyuliu.gowhen.chain.MatcherType
+import org.shiyuliu.gowhen.chain.model.MatcherType
 
 object ScannerConstants {
     val MATCHER_ROOT_METHODS = setOf(

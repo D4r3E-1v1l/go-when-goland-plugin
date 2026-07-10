@@ -1,6 +1,12 @@
-package org.shiyuliu.gowhen.chain
+package org.shiyuliu.gowhen.chain.analyzer
 
-import org.shiyuliu.gowhen.constant.ScannerConstants
+import org.shiyuliu.gowhen.chain.model.ChainNumericInterval
+import org.shiyuliu.gowhen.chain.model.RangeBound
+import org.shiyuliu.gowhen.chain.model.Chain
+import org.shiyuliu.gowhen.chain.model.ChainIssue
+import org.shiyuliu.gowhen.chain.model.ChainIssueType
+import org.shiyuliu.gowhen.chain.model.MatcherType
+import org.shiyuliu.gowhen.chain.constants.ScannerConstants
 
 object ChainIssueAnalyzer {
     fun analyze(chain: Chain): List<ChainIssue> {
@@ -45,6 +51,12 @@ object ChainIssueAnalyzer {
                 ::numericSemanticIssues,
             ),
         ),
+        ChainIssueStage(
+            name = "enum-exhaustive",
+            rules = listOf(
+                ::enumExhaustiveIssues,
+            ),
+        ),
     )
 
     private fun rootOnly(chain: Chain): List<ChainIssue> {
@@ -58,7 +70,6 @@ object ChainIssueAnalyzer {
                 chain = chain,
                 startOffset = chain.root.startOffset,
                 endOffset = chain.root.endOffset,
-                insertOffset = chain.root.endOffset,
             )
         )
     }
@@ -72,7 +83,6 @@ object ChainIssueAnalyzer {
                     chain = chain,
                     startOffset = matcher.condition.startOffset,
                     endOffset = matcher.condition.endOffset,
-                    insertOffset = matcher.condition.endOffset,
                 )
             }
     }
@@ -93,7 +103,6 @@ object ChainIssueAnalyzer {
                     chain = chain,
                     startOffset = matcher.condition.nameStartOffset,
                     endOffset = matcher.condition.nameEndOffset,
-                    insertOffset = matcher.condition.endOffset,
                 )
             }
     }
@@ -115,7 +124,6 @@ object ChainIssueAnalyzer {
                     chain = chain,
                     startOffset = action.nameStartOffset,
                     endOffset = action.nameEndOffset,
-                    insertOffset = action.endOffset,
                 )
             }
     }
@@ -136,7 +144,6 @@ object ChainIssueAnalyzer {
                     chain = chain,
                     startOffset = terminal.nameStartOffset,
                     endOffset = terminal.nameEndOffset,
-                    insertOffset = terminal.endOffset,
                 )
             }
     }
@@ -160,7 +167,6 @@ object ChainIssueAnalyzer {
                 chain = chain,
                 startOffset = chain.startOffset,
                 endOffset = chain.endOffset,
-                insertOffset = chain.endOffset,
             )
         )
     }
@@ -178,7 +184,6 @@ object ChainIssueAnalyzer {
                     chain = chain,
                     startOffset = terminal.startOffset,
                     endOffset = terminal.endOffset,
-                    insertOffset = terminal.endOffset,
                 )
             }
     }
@@ -202,7 +207,6 @@ object ChainIssueAnalyzer {
                 chain = chain,
                 startOffset = firstTerminal.startOffset,
                 endOffset = firstTerminal.endOffset,
-                insertOffset = firstTerminal.endOffset,
             )
         )
     }
@@ -222,6 +226,40 @@ object ChainIssueAnalyzer {
         }
 
         return NumericSemanticRules.analyze(chain)
+    }
+
+    private fun enumExhaustiveIssues(chain: Chain): List<ChainIssue> {
+        val enumFacts = chain.enumFacts
+            ?: return emptyList()
+
+        val exhaustiveTerminal = chain.terminals.firstOrNull { terminal ->
+            terminal.name == "Exhaustive"
+        } ?: return emptyList()
+
+        val coveredNames = enumFacts.coveredCases
+            .map { enumCase -> enumCase.name }
+            .toSet()
+
+        val missingCases = enumFacts.declaredCases
+            .filter { enumCase -> enumCase.name !in coveredNames }
+            .map { enumCase -> enumCase.name }
+
+        if (missingCases.isEmpty()) {
+            return emptyList()
+        }
+
+        return listOf(
+            ChainIssue(
+                type = ChainIssueType.MISSING_ENUM_CASES,
+                chain = chain,
+                startOffset = exhaustiveTerminal.startOffset,
+                endOffset = exhaustiveTerminal.endOffset,
+                details = mapOf(
+                    "enumType" to enumFacts.enumTypeName,
+                    "missingCases" to missingCases.joinToString(", "),
+                ),
+            )
+        )
     }
 }
 
@@ -261,7 +299,6 @@ private object NumericSemanticRules {
                         chain = chain,
                         startOffset = interval.startOffset,
                         endOffset = interval.endOffset,
-                        insertOffset = interval.endOffset,
                     )
                 )
             }

@@ -1,4 +1,4 @@
-package org.shiyuliu.gowhen.chain
+package org.shiyuliu.gowhen.chain.model
 
 enum class ChainIssueType {
     // A. Root / modifier structure
@@ -20,5 +20,5 @@ enum class ChainIssueType {
     NUMERIC_OVERLAP,
     UNREACHABLE_NUMERIC_CONDITION,
     // F. Enum exhaustive
-    MISSING_ENUM_CASE,
+    MISSING_ENUM_CASES,
 }

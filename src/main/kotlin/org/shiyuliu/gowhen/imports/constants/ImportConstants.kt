@@ -1,4 +1,4 @@
-package org.shiyuliu.gowhen.constant
+package org.shiyuliu.gowhen.imports.constants
 
 object ImportConstants {
     const val WHEN_IMPORT_PATH = "github.com/D4r3E-1v1l/go-when"

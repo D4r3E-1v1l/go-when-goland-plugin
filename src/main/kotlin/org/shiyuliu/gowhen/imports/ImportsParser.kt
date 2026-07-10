@@ -1,9 +1,9 @@
-package org.shiyuliu.gowhen.import
+package org.shiyuliu.gowhen.imports
 
 import com.goide.psi.GoFile
 import com.goide.psi.GoImportSpec
-import com.intellij.psi.PsiFile
-import org.shiyuliu.gowhen.constant.ImportConstants
+import org.shiyuliu.gowhen.imports.constants.ImportConstants
+import org.shiyuliu.gowhen.imports.model.ImportedPackage
 
 object ImportsParser {
     fun parse(goFile: GoFile): ImportedPackage? {

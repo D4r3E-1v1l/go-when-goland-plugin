@@ -17,3 +17,7 @@ dependencies {
         testFramework(TestFrameworkType.Platform)
     }
 }
+
+tasks.named<Zip>("buildPlugin") {
+    archiveFileName.set("go-when-goland-plugin-${project.version}.zip")
+}

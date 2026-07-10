@@ -1,15 +1,18 @@
 package org.shiyuliu.gowhen.inspection
 
 import com.intellij.codeInspection.LocalQuickFix
-import org.shiyuliu.gowhen.chain.ChainIssue
-import org.shiyuliu.gowhen.chain.ChainIssueType
-import org.shiyuliu.gowhen.quickfix.AddExhaustiveQuickFix
+import org.shiyuliu.gowhen.chain.model.ChainIssue
+import org.shiyuliu.gowhen.chain.model.ChainIssueType
+import org.shiyuliu.gowhen.quickfix.AddTerminalQuickFix
+import org.shiyuliu.gowhen.quickfix.TerminalFixKind
 
 object InspectionQuickFixFactory {
     fun from(issue: ChainIssue): Array<LocalQuickFix> {
         return when (issue.type) {
             ChainIssueType.MISSING_TERMINAL -> arrayOf(
-                AddExhaustiveQuickFix(issue),
+                AddTerminalQuickFix(issue, TerminalFixKind.EXHAUSTIVE),
+                AddTerminalQuickFix(issue, TerminalFixKind.ELSE),
+                AddTerminalQuickFix(issue, TerminalFixKind.ELSE_DO),
             )
 
             ChainIssueType.ROOT_ONLY,
@@ -24,7 +27,7 @@ object InspectionQuickFixFactory {
             ChainIssueType.TERMINAL_NOT_LAST,
             ChainIssueType.NUMERIC_OVERLAP,
             ChainIssueType.UNREACHABLE_NUMERIC_CONDITION,
-            ChainIssueType.MISSING_ENUM_CASE -> emptyArray()
+            ChainIssueType.MISSING_ENUM_CASES -> emptyArray()
         }
     }
 }

@@ -1,4 +1,4 @@
-package org.shiyuliu.gowhen.chain
+package org.shiyuliu.gowhen.chain.model
 
 data class ChainMatcher(
     val condition: MatcherCondition,

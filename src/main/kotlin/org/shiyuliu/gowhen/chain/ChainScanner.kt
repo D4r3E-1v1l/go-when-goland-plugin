@@ -2,9 +2,12 @@ package org.shiyuliu.gowhen.chain
 
 import com.goide.psi.GoFile
 import com.intellij.psi.PsiFile
-import org.shiyuliu.gowhen.constant.ScannerConstants
-import org.shiyuliu.gowhen.import.ImportedPackage
-import org.shiyuliu.gowhen.import.ImportsParser
+import org.shiyuliu.gowhen.chain.analyzer.ChainIssueAnalyzer
+import org.shiyuliu.gowhen.chain.model.Chain
+import org.shiyuliu.gowhen.chain.model.ChainIssue
+import org.shiyuliu.gowhen.chain.constants.ScannerConstants
+import org.shiyuliu.gowhen.imports.model.ImportedPackage
+import org.shiyuliu.gowhen.imports.ImportsParser
 
 object ChainScanner {
     fun scan(file: PsiFile): List<ChainIssue> {

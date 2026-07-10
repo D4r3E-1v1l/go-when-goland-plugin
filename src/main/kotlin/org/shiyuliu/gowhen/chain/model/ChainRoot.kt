@@ -1,8 +1,9 @@
-package org.shiyuliu.gowhen.chain
+package org.shiyuliu.gowhen.chain.model
 
-data class ChainRootModifier(
+data class ChainRoot(
+    val alias: String,
     val name: String,
-    val dotOffset: Int,
+    val type: MatcherType,
     val nameStartOffset: Int,
     val nameEndOffset: Int,
     val startOffset: Int,

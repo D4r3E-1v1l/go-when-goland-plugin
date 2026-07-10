@@ -1,4 +1,4 @@
-package org.shiyuliu.gowhen.chain
+package org.shiyuliu.gowhen.chain.model
 
 data class ChainTerminal(
     val name: String,

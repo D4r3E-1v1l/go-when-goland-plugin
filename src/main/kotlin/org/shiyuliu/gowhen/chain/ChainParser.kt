@@ -1,7 +1,16 @@
 package org.shiyuliu.gowhen.chain
 
-import org.shiyuliu.gowhen.constant.ScannerConstants
-import org.shiyuliu.gowhen.import.ImportedPackage
+import org.shiyuliu.gowhen.chain.extractor.EnumExhaustiveExtractor
+import org.shiyuliu.gowhen.chain.extractor.NumericConditionExtractor
+import org.shiyuliu.gowhen.chain.model.Chain
+import org.shiyuliu.gowhen.chain.model.ChainMatcher
+import org.shiyuliu.gowhen.chain.model.ChainRoot
+import org.shiyuliu.gowhen.chain.model.ChainRootModifier
+import org.shiyuliu.gowhen.chain.model.ChainTerminal
+import org.shiyuliu.gowhen.chain.model.MatcherAction
+import org.shiyuliu.gowhen.chain.model.MatcherCondition
+import org.shiyuliu.gowhen.chain.constants.ScannerConstants
+import org.shiyuliu.gowhen.imports.model.ImportedPackage
 
 object ChainParser {
     fun parse(
@@ -211,12 +220,20 @@ object ChainParser {
             matchers = matchers,
         )
 
+        val enumFacts = EnumExhaustiveExtractor.extract(
+            text = text,
+            root = root,
+            matchers = matchers,
+            terminals = terminals,
+        )
+
         return Chain(
             root = root,
             rootModifiers = rootModifiers,
             matchers = matchers,
             terminals = terminals,
             numericIntervals = numericIntervals,
+            enumFacts = enumFacts,
             startOffset = rootStartOffset,
             endOffset = chainEndOffset,
         )

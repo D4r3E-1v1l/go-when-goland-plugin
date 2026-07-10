@@ -1,4 +1,11 @@
-package org.shiyuliu.gowhen.chain
+package org.shiyuliu.gowhen.chain.extractor
+
+import org.shiyuliu.gowhen.chain.model.ChainNumericInterval
+import org.shiyuliu.gowhen.chain.model.NumericIntervalSourceKind
+import org.shiyuliu.gowhen.chain.model.RangeBound
+import org.shiyuliu.gowhen.chain.model.ChainMatcher
+import org.shiyuliu.gowhen.chain.model.MatcherAction
+import org.shiyuliu.gowhen.chain.model.MatcherCondition
 
 object NumericConditionExtractor {
     fun extract(

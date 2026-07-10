@@ -1,0 +1,72 @@
+<html>
+<body>
+<p>
+    Reports structural and semantic issues in <code>go-when</code> matcher chains.
+</p>
+
+<p>
+    This inspection checks that matcher chains are explicit, complete, and safe to maintain.
+    Every completed matcher chain must end with a terminal method.
+</p>
+
+<p>
+    Valid terminal methods are:
+</p>
+
+<ul>
+    <li><code>Else(...)</code></li>
+    <li><code>ElseDo(...)</code></li>
+    <li><code>Exhaustive()</code></li>
+</ul>
+
+<p>
+    Use <code>Else(...)</code> or <code>ElseDo(...)</code> when a fallback branch is expected.
+    Use <code>Exhaustive()</code> when all valid cases are expected to be covered.
+</p>
+
+<p>
+    The inspection reports errors for:
+</p>
+
+<ul>
+    <li>matcher roots without completed branches or terminal methods</li>
+    <li>conditions such as <code>Case(...)</code>, <code>Range(...)</code>, <code>When(...)</code>, or <code>Pattern(...)</code> without <code>Then(...)</code> or <code>ThenDo(...)</code></li>
+    <li>invalid conditions, actions, or terminals for the current matcher type</li>
+    <li>duplicate terminal methods</li>
+    <li>terminal methods that are not the last call in the chain</li>
+    <li>numeric condition overlap</li>
+    <li>unreachable numeric conditions</li>
+</ul>
+
+<p>
+    Numeric condition checks use strict interval semantics.
+    Numeric <code>Case(...)</code> values are treated as closed point intervals.
+    For example, <code>Case(3)</code> is treated as <code>[3, 3]</code>.
+</p>
+
+<p>
+    Range helpers are interpreted as:
+</p>
+
+<ul>
+    <li><code>when.Range(a, b)</code>: <code>[a, b)</code></li>
+    <li><code>when.Closed(a, b)</code>: <code>[a, b]</code></li>
+    <li><code>when.From(a)</code>: <code>[a, +∞)</code></li>
+    <li><code>when.Until(b)</code>: <code>(-∞, b)</code></li>
+</ul>
+
+<p>
+    The inspection reports a warning when <code>Exhaustive()</code> is used with a supported enum type
+    but some enum cases are not covered.
+</p>
+
+<p>
+    The current enum exhaustive check supports enums declared as <code>type Name int</code>
+    or <code>type Name string</code> in the current file.
+</p>
+
+<p>
+    The quick fix can add <code>.Exhaustive()</code> after the last completed branch when a terminal method is missing.
+</p>
+</body>
+</html>

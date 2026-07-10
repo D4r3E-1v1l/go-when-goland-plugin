@@ -16,11 +16,11 @@
     <extensions defaultExtensionNs="com.intellij">
         <localInspection
                 language="go"
-                shortName="GoWhenInspection"
+                shortName="GoWhenChainInspection"
                 displayName="go-when matcher chain must end with a terminal method"
                 groupName="Go When"
                 enabledByDefault="true"
-                level="ERROR"
+                level="WARNING"
                 implementationClass="org.shiyuliu.gowhen.inspection.GoWhenChainInspection"/>
     </extensions>
 </idea-plugin>

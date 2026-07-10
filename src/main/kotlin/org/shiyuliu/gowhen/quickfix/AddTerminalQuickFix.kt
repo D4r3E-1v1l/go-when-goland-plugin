@@ -5,13 +5,14 @@ import com.intellij.codeInspection.ProblemDescriptor
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiDocumentManager
-import org.shiyuliu.gowhen.chain.ChainIssue
+import org.shiyuliu.gowhen.chain.model.ChainIssue
 
-class AddExhaustiveQuickFix(
+class AddTerminalQuickFix(
     private val issue: ChainIssue,
+    private val kind: TerminalFixKind,
 ) : LocalQuickFix {
     override fun getFamilyName(): String {
-        return "Add .Exhaustive()"
+        return kind.familyName
     }
 
     override fun applyFix(
@@ -21,9 +22,10 @@ class AddExhaustiveQuickFix(
         val file = descriptor.psiElement.containingFile ?: return
         val document = PsiDocumentManager.getInstance(project).getDocument(file) ?: return
 
-        val insertion = FixAppender.buildExhaustiveInsertion(
+        val insertion = FixAppender.buildTerminalInsertion(
             text = document.text,
             issue = issue,
+            kind = kind,
         )
 
         WriteCommandAction.runWriteCommandAction(
